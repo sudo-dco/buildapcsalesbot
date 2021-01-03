@@ -1,0 +1,10 @@
+# REDDIT CRED
+USERNAME=
+PASSWORD=
+CLIENTID=get from apps tab on reddit
+CLIENTSECRET=get from apps tab on reddit
+USERAGENT=anything
+
+# DISCORD CRED
+TOKEN=get from discord developers page
+
