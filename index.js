@@ -8,7 +8,7 @@ const keywords = [
     "[RAM]",
     "[MOBO]",
     "[PSU]",
-    "[SSD - M2]",
+    "[SSD]",
     "[COOLER]",
     "[FAN]",
     "[MONITOR]",
@@ -19,6 +19,7 @@ const client = new Discord.Client();
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
     console.log("Running script");
+    init();
     setInterval(() => init(), 120000);
 });
 
@@ -42,56 +43,71 @@ const fetchNewPosts = () => {
     return requester
         .getSubreddit("buildapcsales")
         .getNew()
-        .map((post) => {
-            // only push post through if it's newer than lastUpdated or lastUpdated hasn't been set yet
-            if (post.created > lastUpdated || lastUpdated === null) {
-                return {
-                    title: post.title,
-                    id: post.id,
-                    url: post.url,
-                    created: post.created,
-                };
-            }
-        });
+        .map((post) => ({
+            title: post.title,
+            id: post.id,
+            url: post.url,
+            created: post.created,
+            permalink: post.permalink,
+        }));
 };
 
-const parseKeywords = (posts) => {
+const parsePosts = (posts) => {
     return posts.filter((post) => {
         const title = post.title;
         const tag = title.split(" ");
 
-        if (keywords.includes(tag[0])) {
+        if (
+            (keywords.includes(tag[0]) && post.created > lastUpdated) ||
+            (keywords.includes(tag[0]) && lastUpdated === null)
+        ) {
             return {
                 title: post.title,
                 url: post.url,
+                permalink: post.permalink,
             };
         }
     });
 };
 
 const sendMessages = (posts) => {
+    const template = (post) => {
+        // `${post.title}` +
+        // `Product Link: ${post.url}` +
+        // `See Comments: https://www.reddit.com/${post.permalink}`.trim()
+        return (
+            post.title +
+            "\n\nProduct Link: " +
+            post.url +
+            "\n\nSee Comments: https://www.reddit.com/" +
+            post.permalink
+        );
+    };
     const channel = client.channels.cache.get("794367501663600672");
-    posts.forEach((post) => channel.send(`${post.title}, ${post.url}`));
+
+    posts.forEach((post) => channel.send(template(post)));
 };
 
 const init = async () => {
+    let posts = null;
+
     try {
-        const posts = await fetchNewPosts();
+        posts = await fetchNewPosts();
         console.log(
             `Fetching new posts at ${new Date().toLocaleTimeString("en-US")}`
         );
 
-        if (posts.length === 0) {
-            console.log("No new posts found...");
+        const parsed = await parsePosts(posts);
+        if (parsed.length === 0) {
+            console.log("No new posts found within last two minutes");
         } else {
-            const parsed = await parseKeywords(posts);
             console.log(`${parsed.length} posts found! Sending to Discord...`);
-
             sendMessages(parsed);
         }
 
         lastUpdated = Date.now();
     } catch (error) {
+        console.log(posts);
         console.error(error);
     }
 };
