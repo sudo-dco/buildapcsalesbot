@@ -2,25 +2,15 @@ require("dotenv").config();
 const snoowrap = require("snoowrap");
 const Discord = require("discord.js");
 
-let lastUpdated = null;
-const keywords = [
-    "[CASE]",
-    "[RAM]",
-    "[MOBO]",
-    "[PSU]",
-    "[SSD]",
-    "[COOLER]",
-    "[FAN]",
-    "[MONITOR]",
-    "[COMBO]",
-];
+let BPSLastUpdated = null;
+let HWSLastUpdated = null;
 const client = new Discord.Client();
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
     console.log("Running script");
-    init();
-    setInterval(() => init(), 120000);
+    checkBPC();
+    setInterval(() => checkBPC(), 120000);
 });
 
 client.on("message", (msg) => {
@@ -39,9 +29,9 @@ const requester = new snoowrap({
     password: process.env.PASSWORD,
 });
 
-const fetchNewPosts = () => {
+const fetchNewPosts = (subreddit) => {
     return requester
-        .getSubreddit("buildapcsales")
+        .getSubreddit(subreddit)
         .getNew()
         .map((post) => ({
             title: post.title,
@@ -52,14 +42,41 @@ const fetchNewPosts = () => {
         }));
 };
 
-const parsePosts = (posts) => {
+const parsePosts = (posts, subreddit) => {
+    const BPSKeywords = [
+        "case",
+        "ram",
+        "mobo",
+        "motherboard",
+        "psu",
+        "ssd",
+        "cooler",
+        "fan",
+        "monitor",
+        "combo",
+    ];
+    const HWSKeywords = ["us-wa"];
+    let keywordsToUse = null;
+    let lastUpdated = null;
+
+    if (subreddit === "bps") {
+        keywordsToUse = BPSKeywords;
+        lastUpdated = BPSLastUpdated;
+    } else {
+        keywordsToUse = HWSKeywords;
+        lastUpdated = HWSLastUpdated;
+    }
+
     return posts.filter((post) => {
         const title = post.title;
-        const tag = title.split(" ");
+        const splitTitle = title.split(" ");
+        const tag = splitTitle[0]
+            .substring(1, splitTitle[0].length - 1)
+            .toLowerCase();
 
         if (
-            (keywords.includes(tag[0]) && post.created > lastUpdated) ||
-            (keywords.includes(tag[0]) && lastUpdated === null)
+            (keywordsToUse.includes(tag) && post.created > lastUpdated) ||
+            (keywordsToUse.includes(tag) && lastUpdated === null)
         ) {
             return {
                 title: post.title,
@@ -70,11 +87,16 @@ const parsePosts = (posts) => {
     });
 };
 
-const sendMessages = (posts) => {
+const sendMessages = (posts, subreddit) => {
+    let channel = null;
+
+    if (subreddit === "bps") {
+        channel = client.channels.cache.get("794367501663600672");
+    } else {
+        channel = client.channels.cache.get("795863235215360001");
+    }
+
     const template = (post) => {
-        // `${post.title}` +
-        // `Product Link: ${post.url}` +
-        // `See Comments: https://www.reddit.com/${post.permalink}`.trim()
         return (
             post.title +
             "\n\nProduct Link: " +
@@ -83,16 +105,15 @@ const sendMessages = (posts) => {
             post.permalink
         );
     };
-    const channel = client.channels.cache.get("794367501663600672");
 
     posts.forEach((post) => channel.send(template(post)));
 };
 
-const init = async () => {
+const checkHardwareSwap = async () => {
     let posts = null;
 
     try {
-        posts = await fetchNewPosts();
+        posts = fetchNewPosts("hardwareswap");
         console.log(
             `Fetching new posts at ${new Date().toLocaleTimeString("en-US")}`
         );
@@ -105,7 +126,30 @@ const init = async () => {
             sendMessages(parsed);
         }
 
-        lastUpdated = Date.now();
+        HWSLastUpdated = parsed[0].created;
+    } catch (error) {
+        console.log(posts);
+        console.error(error);
+    }
+};
+
+const checkBPC = async () => {
+    let posts = null;
+
+    try {
+        posts = await fetchNewPosts("buildapcsales");
+        console.log(
+            `Fetching new posts at ${new Date().toLocaleTimeString("en-US")}`
+        );
+
+        const parsed = await parsePosts(posts, "bps");
+        if (parsed.length === 0) {
+            console.log("No new posts found within last two minutes");
+        } else {
+            console.log(`${parsed.length} posts found! Sending to Discord...`);
+            sendMessages(parsed);
+            BPSLastUpdated = parsed[0].created;
+        }
     } catch (error) {
         console.log(posts);
         console.error(error);
