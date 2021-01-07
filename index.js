@@ -4,13 +4,14 @@ const Discord = require("discord.js");
 
 let BPSLastUpdated = null;
 let HWSLastUpdated = null;
+const timer = 300000;
 const client = new Discord.Client();
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
     console.log("Running script");
-    checkBPC();
-    setInterval(() => checkBPC(), 120000);
+    setInterval(() => checkBPC(), timer);
+    setInterval(() => checkHWS(), timer);
 });
 
 client.on("message", (msg) => {
@@ -92,41 +93,46 @@ const sendMessages = (posts, subreddit) => {
 
     if (subreddit === "bps") {
         channel = client.channels.cache.get("794367501663600672");
+        posts.forEach((post) =>
+            channel.send(
+                post.title +
+                    "\n\nProduct Link: " +
+                    post.url +
+                    "\n\nSee Comments: https://www.reddit.com/" +
+                    post.permalink
+            )
+        );
     } else {
         channel = client.channels.cache.get("795863235215360001");
-    }
-
-    const template = (post) => {
-        return (
-            post.title +
-            "\n\nProduct Link: " +
-            post.url +
-            "\n\nSee Comments: https://www.reddit.com/" +
-            post.permalink
+        posts.forEach((post) =>
+            channel.send(
+                post.title +
+                    "\n\nSee Comments: https://www.reddit.com/" +
+                    post.permalink
+            )
         );
-    };
-
-    posts.forEach((post) => channel.send(template(post)));
+    }
 };
 
-const checkHardwareSwap = async () => {
+const checkHWS = async () => {
     let posts = null;
 
     try {
-        posts = fetchNewPosts("hardwareswap");
+        posts = await fetchNewPosts("hardwareswap");
         console.log(
             `Fetching new posts at ${new Date().toLocaleTimeString("en-US")}`
         );
 
-        const parsed = await parsePosts(posts);
+        const parsed = await parsePosts(posts, "hws");
         if (parsed.length === 0) {
-            console.log("No new posts found within last two minutes");
+            console.log("[HWS] No new posts found within last two minutes");
         } else {
-            console.log(`${parsed.length} posts found! Sending to Discord...`);
-            sendMessages(parsed);
+            console.log(
+                `[HWS] ${parsed.length} posts found! Sending to Discord...`
+            );
+            sendMessages(parsed, "hws");
+            HWSLastUpdated = parsed[0].created;
         }
-
-        HWSLastUpdated = parsed[0].created;
     } catch (error) {
         console.log(posts);
         console.error(error);
@@ -144,10 +150,12 @@ const checkBPC = async () => {
 
         const parsed = await parsePosts(posts, "bps");
         if (parsed.length === 0) {
-            console.log("No new posts found within last two minutes");
+            console.log("[BPS] No new posts found within last two minutes");
         } else {
-            console.log(`${parsed.length} posts found! Sending to Discord...`);
-            sendMessages(parsed);
+            console.log(
+                `[BPS] ${parsed.length} posts found! Sending to Discord...`
+            );
+            sendMessages(parsed, "bps");
             BPSLastUpdated = parsed[0].created;
         }
     } catch (error) {
