@@ -175,15 +175,15 @@ Project Link: [https://github.com/sudo-dco/buildapcsalesbot](https://github.com/
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/sudo-dco/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/sudo-dco/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/sudo-dco/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/sudo-dco/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/sudo-dco/repo.svg?style=for-the-badge
-[stars-url]: https://github.com/sudo-dco/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/sudo-dco/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/sudo-dco/repo/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/sudo-dco/buildapcsalesbot.svg?style=for-the-badge
+[contributors-url]: https://github.com/sudo-dco/buildapcsalesbot/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/sudo-dco/buildapcsalesbot.svg?style=for-the-badge
+[forks-url]: https://github.com/sudo-dco/buildapcsalesbot/network/members
+[stars-shield]: https://img.shields.io/github/stars/sudo-dco/buildapcsalesbot.svg?style=for-the-badge
+[stars-url]: https://github.com/sudo-dco/buildapcsalesbot/stargazers
+[issues-shield]: https://img.shields.io/github/issues/sudo-dco/buildapcsalesbot.svg?style=for-the-badge
+[issues-url]: https://github.com/sudo-dco/buildapcsalesbot/issues
+[license-shield]: https://img.shields.io/github/license/sudo-dco/buildapcsalesbot.svg?style=for-the-badge
+[license-url]: https://github.com/sudo-dco/buildapcsalesbot/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/github_username
+[linkedin-url]: https://linkedin.com/in/dcowa
