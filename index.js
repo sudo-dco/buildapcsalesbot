@@ -1,15 +1,21 @@
 require("dotenv").config();
+const http = require("http");
 const snoowrap = require("snoowrap");
 const Discord = require("discord.js");
 
 let BPSLastUpdated = null;
 let HWSLastUpdated = null;
 const timer = 300000;
+const port = process.env.PORT || 3000;
 const client = new Discord.Client();
+const server = http.createServer((req, res) => {});
+
+server.listen(port, () => {
+    console.log(`Script running on port ${port}`);
+});
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
-    console.log("Running script");
     setInterval(() => checkBPC(), timer);
     setInterval(() => checkHWS(), timer);
 });
