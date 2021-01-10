@@ -49,6 +49,7 @@ const fetchNewPosts = (subreddit) => {
         }));
 };
 
+// parse keywords in posts
 const parsePosts = (posts, subreddit) => {
     const BPSKeywords = [
         "case",
