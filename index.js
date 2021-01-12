@@ -132,7 +132,7 @@ const checkHWS = async () => {
 
         const parsed = await parsePosts(posts, "hws");
         if (parsed.length === 0) {
-            console.log("[HWS] No new posts found within last two minutes");
+            console.log("[HWS] No new posts found within last five minutes");
         } else {
             console.log(
                 `[HWS] ${parsed.length} posts found! Sending to Discord...`
@@ -157,7 +157,7 @@ const checkBPC = async () => {
 
         const parsed = await parsePosts(posts, "bps");
         if (parsed.length === 0) {
-            console.log("[BPS] No new posts found within last two minutes");
+            console.log("[BPS] No new posts found within last five minutes");
         } else {
             console.log(
                 `[BPS] ${parsed.length} posts found! Sending to Discord...`
