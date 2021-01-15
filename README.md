@@ -35,7 +35,7 @@
   <h3 align="center">BuildAPCSalesBot</h3>
 
   <p align="center">
-    Hi, this was a personal project came about during my time struggling to beat the bots on buying a 5600x. After days of missing in stock notifications,
+    This was a project idea that came during my time struggling to beat the bots on buying a 5600x. After days of missing in stock notifications,
     I decided I had to do something about it. I wanted to make a Discord bot that would alert me anytime a post was made on /r/buildapcsales regarding any CPU.
     It was a great excuse to learn about using the Reddit API and how Discord bots worked and I had a lot of fun with it.
     I've recently expanded to include other PC parts and looking for posts in the hardwareswap subreddit.
