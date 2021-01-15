@@ -116,8 +116,10 @@ To get a local copy up and running follow these simple steps.
    ```sh
    npm install
    ```
-
-
+3. Build Bundle
+   ```sh
+   npm run build
+   ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
