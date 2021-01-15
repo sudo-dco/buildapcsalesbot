@@ -1,3 +1,7 @@
 .DS_Store
-.env
+/env/.env
 /node_modules
+/public/bundle.js
+babel.config.js
+jest.config.js
+Procfile

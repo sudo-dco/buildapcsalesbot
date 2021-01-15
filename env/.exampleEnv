@@ -1,6 +1,6 @@
 # REDDIT CRED
-USERNAME=
-PASSWORD=
+USERNAME=reddit username
+PASSWORD=reddit password
 CLIENTID=get from apps tab on reddit
 CLIENTSECRET=get from apps tab on reddit
 USERAGENT=anything
