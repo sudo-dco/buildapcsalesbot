@@ -87,6 +87,7 @@
 
 ### Built With
 
+* []() React
 * []() Node.js
 * []() Snoowrap
 * []() Discord.js
@@ -122,9 +123,9 @@ To get a local copy up and running follow these simple steps.
 ## Usage
 
 1. Edit the env file with your reddit bot credentials and your Discord bot token.
-2. Change the timer variable to set how often you want the bot to check. Default is 5 minutes.
-3. Edit the channel IDs in the sendMessage function depending on what channel you want the message sent to in Discord.
-4. Run the script with 'node index.js' to run locally, I currently have it running on Heroku.
+2. Edit the timer variable in /server/index.js to adjust how often you want the bot to check. Default is 5 minutes.
+3. Edit the channel IDs variables in /server/index.js with the ID's of the channel you want to send to in Discord.
+4. Run the script with 'npm run server', navigate to http://localhost:3000 and click "Start Interval" to run.
 
 <!-- ROADMAP -->
 ## Roadmap
