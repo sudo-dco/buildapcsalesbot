@@ -17,7 +17,7 @@ app.use(express.static("public"));
 app.get("/startInterval", (req, res) => {
     try {
         updateTimestamp();
-        bpcInterval = setInterval(() => checkBPC(), timer);
+        bpcInterval = setInterval(() => checkBPS(), timer);
         hwsInterval = setInterval(() => checkHWS(), timer);
         res.sendStatus(200);
     } catch (error) {
