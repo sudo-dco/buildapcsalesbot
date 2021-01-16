@@ -30,7 +30,7 @@ app.get("/startBPSInterval", (req, res) => {
 app.get("/startHWSInterval", (req, res) => {
     try {
         updateTimestamp();
-        hwsInterval = setInterval(() => hws.getHWS(lastUpdated), timer);
+        hwsInterval = setInterval(() => hws.getPosts(lastUpdated), timer);
         console.log("HWS Interval Running");
         res.sendStatus(200);
     } catch (error) {
