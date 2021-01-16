@@ -1,6 +1,8 @@
 .DS_Store
+jest.config.js
+Procfile
+
 /env/.env
 /node_modules
 /public/bundle.js
-jest.config.js
-Procfile
+/src/helpers/timestamps.txt
