@@ -35,7 +35,7 @@
   <h3 align="center">BuildAPCSalesBot</h3>
 
   <p align="center">
-    Hi, this was a personal project came about during my time struggling to beat the bots on buying a 5600x. After days of missing in stock notifications,
+    This was a project idea that came during my time struggling to beat the bots on buying a 5600x. After days of missing in stock notifications,
     I decided I had to do something about it. I wanted to make a Discord bot that would alert me anytime a post was made on /r/buildapcsales regarding any CPU.
     It was a great excuse to learn about using the Reddit API and how Discord bots worked and I had a lot of fun with it.
     I've recently expanded to include other PC parts and looking for posts in the hardwareswap subreddit.
@@ -124,7 +124,7 @@ To get a local copy up and running follow these simple steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-1. Edit the env file with your reddit bot credentials and your Discord bot token.
+1. Rename .exampleEnv file to .env and add your reddit bot credentials and your Discord bot token.
 2. Edit the timer variable in /server/index.js to adjust how often you want the bot to check. Default is 5 minutes.
 3. Edit the channel IDs variables in /server/index.js with the ID's of the channel you want to send to in Discord.
 4. Run the script with 'npm run server', navigate to http://localhost:3000 and click "Start Interval" to run.
