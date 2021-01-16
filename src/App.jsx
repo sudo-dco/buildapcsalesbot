@@ -3,59 +3,27 @@ import React from 'react';
 
 const App = () => {
     const startInterval = () => {
-        axios.get('/startInterval')
-            .then((response) => {
-                console.log('Start Interval Running');
-            })
-            .catch((error) => {
-                console.error("Error running start interval");
-            })
+        axios.get('/startInterval');
     };
 
     const stopInterval = () => {
-        axios.get('/stopInterval')
-            .then((response) => {
-                console.log('Stop Interval Running');
-            })
-            .catch((error) => {
-                console.error("Error running stop interval");
-            })
+        axios.get('/stopInterval');
     };
 
     const runBPS = () => {
-        axios.get('/runBPS')
-            .then((response) => {
-                console.log('Ran BPS Function');
-            })
-            .catch((error) => {
-                console.error("Error running BPS function");
-            })
+        axios.get('/runBPS');
     };
 
     const runHWS = () => {
-        axios.get('/runHWS')
-            .then((response) => {
-                console.log('Ran HWS Function');
-            })
-            .catch((error) => {
-                console.error("Error running HWS function");
-            })
+        axios.get('/runHWS');
     };
 
     const clearBPSChannel = () => {
-        axios.get('/clearBPSChannel')
-            .then((response) => {
-                console.log('BPS Channel Cleared');
-            })
-            .catch((error) => {})
+        axios.get('/clearBPSChannel');
     };
 
     const clearHWSChannel = () => {
-        axios.get('/clearHWSChannel')
-            .then((response) => {
-                console.log('HWS Channel Cleared');
-            })
-            .catch((error) => {})
+        axios.get('/clearHWSChannel');
     };
 
     return (

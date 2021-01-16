@@ -4,7 +4,7 @@ const ts = require("../src/helpers/timestamps");
 
 // VARS
 let lastUpdated = null;
-let bpcInterval = null;
+let bpsInterval = null;
 let hwsInterval = null;
 const timer = 300000;
 const bpsChannelID = "794367501663600672";
@@ -17,7 +17,7 @@ app.use(express.static("public"));
 app.get("/startInterval", (req, res) => {
     try {
         updateTimestamp();
-        bpcInterval = setInterval(() => checkBPS(), timer);
+        bpsInterval = setInterval(() => checkBPS(), timer);
         hwsInterval = setInterval(() => checkHWS(), timer);
         res.sendStatus(200);
     } catch (error) {
@@ -27,7 +27,7 @@ app.get("/startInterval", (req, res) => {
 
 app.get("/stopInterval", (req, res) => {
     try {
-        clearInterval(bpcInterval);
+        clearInterval(bpsInterval);
         clearInterval(hwsInterval);
         res.sendStatus(200);
     } catch (error) {
