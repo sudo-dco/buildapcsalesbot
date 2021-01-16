@@ -1,6 +1,7 @@
 const express = require("express");
 const clients = require("../src/helpers/clients");
 const ts = require("../src/helpers/timestamps");
+const hws = require("../src/hws/hws");
 
 // VARS
 let lastUpdated = null;
@@ -14,13 +15,26 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.static("public"));
 
-app.get("/startInterval", (req, res) => {
+app.get("/startBPSInterval", (req, res) => {
     try {
         updateTimestamp();
         bpsInterval = setInterval(() => checkBPS(), timer);
-        hwsInterval = setInterval(() => checkHWS(), timer);
+        console.log("BPS Interval Running");
         res.sendStatus(200);
     } catch (error) {
+        console.error("Error running BPS interval");
+        res.sendStatus(500);
+    }
+});
+
+app.get("/startHWSInterval", (req, res) => {
+    try {
+        updateTimestamp();
+        hwsInterval = setInterval(() => hws.getHWS(lastUpdated), timer);
+        console.log("HWS Interval Running");
+        res.sendStatus(200);
+    } catch (error) {
+        console.error("Error running HWS interval");
         res.sendStatus(500);
     }
 });
@@ -29,8 +43,10 @@ app.get("/stopInterval", (req, res) => {
     try {
         clearInterval(bpsInterval);
         clearInterval(hwsInterval);
+        console.log("Stop Interval Running");
         res.sendStatus(200);
     } catch (error) {
+        console.error("Error running stop interval");
         res.sendStatus(500);
     }
 });
@@ -39,8 +55,10 @@ app.get("/runBPS", (req, res) => {
     try {
         updateTimestamp();
         checkBPS();
+        console.log("Ran BPS Function");
         res.sendStatus(200);
     } catch (error) {
+        console.error("Error running BPS function");
         res.sendStatus(500);
     }
 });
@@ -49,8 +67,10 @@ app.get("/runHWS", (req, res) => {
     try {
         updateTimestamp();
         checkHWS();
+        console.log("Ran HWS Function");
         res.sendStatus(200);
     } catch (error) {
+        console.error("Error running HWS function");
         res.sendStatus(500);
     }
 });
@@ -58,6 +78,7 @@ app.get("/runHWS", (req, res) => {
 app.get("/clearBPSChannel", (req, res) => {
     try {
         deleteMessages("bps");
+        console.log("BPS Channel Cleared");
         res.sendStatus(200);
     } catch (error) {
         console.error("Error clearing BPC Channel: ", error);
@@ -68,6 +89,7 @@ app.get("/clearBPSChannel", (req, res) => {
 app.get("/clearHWSChannel", (req, res) => {
     try {
         deleteMessages("hws");
+        console.log("HWS Channel Cleared");
         res.sendStatus(200);
     } catch (error) {
         console.error("Error clearing HWS Channel: ", error);
@@ -108,7 +130,7 @@ const parsePosts = (posts, subreddit) => {
         "gpu",
         "restock",
     ];
-    const HWSKeywords = ["us-wa"];
+    const HWSKeywords = ["usa-wa"];
     let keywordsToUse = null;
 
     switch (subreddit) {
