@@ -29,10 +29,10 @@ const getPosts = async (lastUpdated) => {
         const newPosts = await posts.fetchNew("hardwareswap");
 
         const parsed = newPosts.filter((post) => {
+            let match = false;
             const title = post.title
                 .substring(0, post.title.indexOf("[W]"))
                 .toLowerCase();
-            let match = false;
 
             if (post.created > lastUpdated) {
                 HWSKeywords.forEach((word) => {
