@@ -15,9 +15,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.static("public"));
 
-app.get("/startBPSInterval", (req, res) => {
+app.get("/startBPSInterval", async (req, res) => {
     try {
-        updateTimestamp();
+        await updateTimestamp();
         bpsInterval = setInterval(() => checkBPS(), timer);
         console.log("BPS Interval Running");
         res.sendStatus(200);
@@ -27,10 +27,12 @@ app.get("/startBPSInterval", (req, res) => {
     }
 });
 
-app.get("/startHWSInterval", (req, res) => {
+app.get("/startHWSInterval", async (req, res) => {
     try {
-        updateTimestamp();
-        hwsInterval = setInterval(() => hws.getPosts(lastUpdated), timer);
+        await updateTimestamp();
+        hwsInterval = setInterval(() => {
+            lastUpdated = hws.getPosts(lastUpdated);
+        }, timer);
         console.log("HWS Interval Running");
         res.sendStatus(200);
     } catch (error) {
@@ -51,9 +53,9 @@ app.get("/stopInterval", (req, res) => {
     }
 });
 
-app.get("/runBPS", (req, res) => {
+app.get("/runBPS", async (req, res) => {
     try {
-        updateTimestamp();
+        await updateTimestamp();
         checkBPS();
         console.log("Ran BPS Function");
         res.sendStatus(200);
@@ -63,10 +65,10 @@ app.get("/runBPS", (req, res) => {
     }
 });
 
-app.get("/runHWS", (req, res) => {
+app.get("/runHWS", async (req, res) => {
     try {
-        updateTimestamp();
-        checkHWS();
+        await updateTimestamp();
+        lastUpdated = hws.getPosts(lastUpdated);
         console.log("Ran HWS Function");
         res.sendStatus(200);
     } catch (error) {
