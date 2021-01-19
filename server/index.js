@@ -19,7 +19,10 @@ app.get("/startBPSInterval", async (req, res) => {
     try {
         await updateTimestamp();
         bpsInterval = setInterval(() => checkBPS(), timer);
-        console.log("BPS Interval Running");
+        hwsInterval = setInterval(() => {
+            lastUpdated = hws.getPosts(lastUpdated);
+        }, timer);
+        console.log("BPS/HWS Interval Running");
         res.sendStatus(200);
     } catch (error) {
         console.error("Error running BPS interval");
@@ -264,9 +267,9 @@ const checkBPS = async () => {
                 `[BPS] ${parsed.length} posts found! Sending to Discord...`
             );
             sendMessages(parsed, "bps");
-            lastUpdated = parsed[0].created;
+            // lastUpdated = parsed[0].created;
             // update timestamp file
-            ts.setTimestamp(parsed[0].created.toString());
+            // ts.setTimestamp(parsed[0].created.toString());
         }
     } catch (error) {
         console.error("Error with checkBPC: ", error);
