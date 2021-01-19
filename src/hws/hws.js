@@ -1,6 +1,5 @@
 const posts = require("../helpers/posts");
 const message = require("../helpers/message");
-const ts = require("../helpers/timestamps");
 
 const HWSKeywords = [
     "usa-wa",
@@ -19,6 +18,7 @@ const HWSKeywords = [
     "ddr4",
     "xeon",
     "psu",
+
     "fan",
     "fans",
     "intel",
@@ -28,13 +28,13 @@ const getPosts = async (lastUpdated) => {
     try {
         const newPosts = await posts.fetchNew("hardwareswap");
 
-        const parsed = newPosts.filter((post) => {
+        const parsed = await newPosts.filter((post) => {
             let match = false;
             const title = post.title
                 .substring(0, post.title.indexOf("[W]"))
                 .toLowerCase();
 
-            if (post.created > lastUpdated) {
+            if (post.created > lastUpdated || lastUpdated === null) {
                 HWSKeywords.forEach((word) => {
                     if (title.includes(word)) {
                         match = true;
@@ -47,6 +47,7 @@ const getPosts = async (lastUpdated) => {
 
         if (parsed.length === 0) {
             console.log("[HWS] No new posts found within last five minutes");
+            return newPosts[0].created;
         } else {
             const latestTime = parsed[0].created;
 
@@ -54,8 +55,6 @@ const getPosts = async (lastUpdated) => {
                 `[HWS] ${parsed.length} posts found! Sending to Discord...`
             );
             message.send(parsed, "hws");
-            // update timestamp file
-            ts.setTimestamp(latestTime.toString());
             return latestTime;
         }
     } catch (error) {
