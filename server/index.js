@@ -18,11 +18,15 @@ app.use(express.static("public"));
 app.get("/startBPSInterval", async (req, res) => {
     try {
         await updateTimestamp();
-        bpsInterval = setInterval(() => checkBPS(), timer);
-        hwsInterval = setInterval(() => {
-            lastUpdated = hws.getPosts(lastUpdated);
+
+        bpsInterval = setInterval(async () => {
+            checkBPS();
+            const latestTime = await hws.getPosts(lastUpdated);
+            lastUpdated = latestTime.toString();
+            await ts.setTimestamp(latestTime.toString());
+            console.log("in function: ", lastUpdated);
         }, timer);
-        console.log("BPS/HWS Interval Running");
+
         res.sendStatus(200);
     } catch (error) {
         console.error("Error running BPS interval");
@@ -83,7 +87,6 @@ app.get("/runHWS", async (req, res) => {
 app.get("/clearBPSChannel", (req, res) => {
     try {
         deleteMessages("bps");
-        console.log("BPS Channel Cleared");
         res.sendStatus(200);
     } catch (error) {
         console.error("Error clearing BPC Channel: ", error);
@@ -94,7 +97,6 @@ app.get("/clearBPSChannel", (req, res) => {
 app.get("/clearHWSChannel", (req, res) => {
     try {
         deleteMessages("hws");
-        console.log("HWS Channel Cleared");
         res.sendStatus(200);
     } catch (error) {
         console.error("Error clearing HWS Channel: ", error);
