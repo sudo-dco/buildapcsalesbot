@@ -1,6 +1,6 @@
 const express = require("express");
 const clients = require("../src/helpers/clients");
-const ts = require("../src/helpers/timestamps");
+const fs = require("../src/helpers/fs");
 const hws = require("../src/hws/hws");
 
 // VARS
@@ -21,15 +21,22 @@ app.get("/startBPSInterval", async (req, res) => {
 
         bpsInterval = setInterval(async () => {
             checkBPS();
-            const latestTime = await hws.getPosts(lastUpdated);
-            lastUpdated = latestTime.toString();
-            await ts.setTimestamp(latestTime.toString());
+            let latestTime = await hws.getPosts(lastUpdated);
+            // error code 1 - failed to fetch new posts, keep old timestamp
+            if (latestTime === 1) {
+                latestTime = lastUpdated;
+            } else {
+                lastUpdated = latestTime.toString();
+            }
+
+            await fs.setTimestamp(latestTime.toString());
             console.log("in function: ", lastUpdated);
         }, timer);
 
         res.sendStatus(200);
     } catch (error) {
-        console.error("Error running BPS interval");
+        console.error("Error running BPS interval: ");
+        fs.setErrorLog(error.toString());
         res.sendStatus(500);
     }
 });
@@ -219,7 +226,7 @@ const sendMessages = (posts, subreddit) => {
 };
 
 const updateTimestamp = async () => {
-    const time = await ts.getTimestamp();
+    const time = await fs.getTimestamp();
 
     if (time !== "null") {
         lastUpdated = parseInt(time);
@@ -245,7 +252,7 @@ const checkHWS = async () => {
             sendMessages(parsed, "hws");
             lastUpdated = parsed[0].created;
             // update timestamp file
-            ts.setTimestamp(parsed[0].created.toString());
+            fs.setTimestamp(parsed[0].created.toString());
         }
     } catch (error) {
         console.error("Error with checkHWS: ", error);
@@ -271,7 +278,7 @@ const checkBPS = async () => {
             sendMessages(parsed, "bps");
             // lastUpdated = parsed[0].created;
             // update timestamp file
-            // ts.setTimestamp(parsed[0].created.toString());
+            // fs.setTimestamp(parsed[0].created.toString());
         }
     } catch (error) {
         console.error("Error with checkBPC: ", error);
