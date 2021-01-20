@@ -1,5 +1,6 @@
 const posts = require("../helpers/posts");
 const message = require("../helpers/message");
+const fs = require("../helpers/fs");
 
 const HWSKeywords = [
     "usa-wa",
@@ -18,7 +19,6 @@ const HWSKeywords = [
     "ddr4",
     "xeon",
     "psu",
-
     "fan",
     "fans",
     "intel",
@@ -58,7 +58,9 @@ const getPosts = async (lastUpdated) => {
             return latestTime;
         }
     } catch (error) {
-        console.error("Error with getHWS: ", error);
+        console.error("Error with getHWS");
+        fs.setErrorLog(error.toString());
+        return 1;
     }
 };
 
