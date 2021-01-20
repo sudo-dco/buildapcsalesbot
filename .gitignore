@@ -6,3 +6,4 @@ Procfile
 /node_modules
 /public/bundle.js
 /src/helpers/timestamps.txt
+/src/helpers/error.log
