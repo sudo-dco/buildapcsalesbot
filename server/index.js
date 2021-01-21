@@ -35,7 +35,7 @@ app.get("/startBPSInterval", async (req, res) => {
 
         res.sendStatus(200);
     } catch (error) {
-        console.error("Error running BPS interval: ");
+        console.error("Error running BPS interval");
         fs.setErrorLog(error.toString());
         res.sendStatus(500);
     }
