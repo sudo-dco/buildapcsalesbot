@@ -47,6 +47,7 @@ const getPosts = async (lastUpdated) => {
 
         if (parsed.length === 0) {
             console.log("[HWS] No new posts found within last five minutes");
+
             return newPosts[0].created;
         } else {
             const latestTime = parsed[0].created;
@@ -55,11 +56,12 @@ const getPosts = async (lastUpdated) => {
                 `[HWS] ${parsed.length} posts found! Sending to Discord...`
             );
             message.send(parsed, "hws");
+
             return latestTime;
         }
     } catch (error) {
-        console.error("Error with getHWS");
-        fs.setErrorLog(error.toString());
+        console.error("Error with HWS getPosts");
+        fs.setErrorLog(error.toString(), "hws");
         return 1;
     }
 };
