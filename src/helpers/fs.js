@@ -3,11 +3,21 @@ const path = require("path");
 
 /*
     Write to error log
-    @param {array} data - error message
+    @param {string} data - error message
+    @param {string} dir - directory to write logs to
 */
-const setErrorLog = async (data) => {
+const setErrorLog = async (data, dir) => {
+    let dirPath = null;
+
+    switch (dir) {
+        case "bps":
+            dirPath = path.resolve(__dirname, "../bps/error.log");
+        case "hws":
+            dirPath = path.resolve(__dirname, "../hws/error.log");
+    }
+
     try {
-        await fsPromises.writeFile(path.resolve(__dirname, "error.log"), data, {
+        await fsPromises.writeFile(dirPath, data, {
             flag: "a+",
         });
 
