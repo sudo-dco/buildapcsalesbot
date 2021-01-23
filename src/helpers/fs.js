@@ -1,23 +1,19 @@
 const fsPromises = require("fs").promises;
 const path = require("path");
 
+const dirPaths = {
+    bps: path.resolve(__dirname, "../bps"),
+    hws: path.resolve(__dirname, "../hws"),
+};
+
 /*
     Write to error log
     @param {string} data - error message
     @param {string} dir - directory to write logs to
 */
 const setErrorLog = async (data, dir) => {
-    let dirPath = null;
-
-    switch (dir) {
-        case "bps":
-            dirPath = path.resolve(__dirname, "../bps/error.log");
-        case "hws":
-            dirPath = path.resolve(__dirname, "../hws/error.log");
-    }
-
     try {
-        await fsPromises.writeFile(dirPath, data, {
+        await fsPromises.writeFile(`${dirPaths[dir]}/error.log`, data, {
             flag: "a+",
         });
 
@@ -31,13 +27,11 @@ const setErrorLog = async (data, dir) => {
     Write to timestamp file
     @param {array} times - unix time of last check for bps and hws subreddits
 */
-const setTimestamp = async (time) => {
+const setTimestamp = async (time, dir) => {
     try {
-        await fsPromises.writeFile(
-            path.resolve(__dirname, "timestamps.txt"),
-            time,
-            { flag: "r+" }
-        );
+        await fsPromises.writeFile(`${dirPaths[dir]}/timestamp.log`, time, {
+            flag: "w+",
+        });
 
         return 0;
     } catch (err) {
@@ -49,10 +43,10 @@ const setTimestamp = async (time) => {
     Read from timestamp.txt
     @return {array} of last updated times in unix time
 */
-const getTimestamp = async () => {
+const getTimestamp = async (dir) => {
     try {
         const data = await fsPromises.readFile(
-            path.resolve(__dirname, "timestamps.txt"),
+            `${dirPaths[dir]}/timestamp.log`,
             "utf8"
         );
 
