@@ -52,9 +52,11 @@ const getTimestamp = async (dir) => {
 
         return data;
     } catch (err) {
-        console.error("Error with reading timestamp file: ", err);
         if (err.code === "ENOENT") {
+            // timestamp file doesn't exist yet
             return null;
+        } else {
+            console.error("Error with reading timestamp file: ", err);
         }
     }
 };
