@@ -1,2 +1,0 @@
-BPSLastUpdated=12345
-HWSLastUpdated=67890
