@@ -1,4 +1,5 @@
 const fsPromises = require("fs").promises;
+const fs = require("fs");
 const path = require("path");
 
 const dirPaths = {
@@ -52,12 +53,9 @@ const getTimestamp = async (dir) => {
 
         return data;
     } catch (err) {
-        if (err.code === "ENOENT") {
-            // timestamp file doesn't exist yet
-            return null;
-        } else {
-            console.error("Error with reading timestamp file: ", err);
-        }
+        // console.error("Error with reading timestamp file: ", err);
+        // no file found, return null for no timestamp
+        return null;
     }
 };
 
