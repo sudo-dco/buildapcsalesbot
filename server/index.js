@@ -24,7 +24,7 @@ app.get("/startBPSInterval", async (req, res) => {
         bpsInterval = setInterval(async () => {
             let bpsStatus = await bps.getPosts(bpsLastUpdated);
             // error code 1 - failed to fetch new posts, keep old timestamp
-            if (bpsStatus === 0) {
+            if (bpsStatus !== 1) {
                 bpsLastUpdated = bpsStatus;
                 await fs.setTimestamp(bpsStatus.toString(), "bps");
             }
@@ -45,7 +45,7 @@ app.get("/startHWSInterval", async (req, res) => {
         hwsInterval = setInterval(async () => {
             let hwsStatus = await hws.getPosts(hwsLastUpdated);
             // error code 1 - failed to fetch new posts, keep old timestamp
-            if (hwsStatus === 0) {
+            if (hwsStatus !== 1) {
                 hwsLastUpdated = hwsStatus;
                 await fs.setTimestamp(hwsStatus.toString(), "hws");
             }
