@@ -230,10 +230,15 @@ const sendMessages = (posts, subreddit) => {
 };
 
 const updateTimestamp = async () => {
-    const time = await fs.getTimestamp();
+    const bpsTime = await fs.getTimestamp("bps");
+    const hwsTime = await fs.getTimestamp("hws");
 
-    if (time !== "null") {
-        lastUpdated = parseInt(time);
+    if (bpsTime !== "null") {
+        bpsLastUpdated = parseInt(bpsTime);
+    }
+
+    if (hwsTime !== "null") {
+        hwsLastUpdated = parseInt(hwsTime);
     }
 };
 
