@@ -233,11 +233,11 @@ const updateTimestamp = async () => {
     const bpsTime = await fs.getTimestamp("bps");
     const hwsTime = await fs.getTimestamp("hws");
 
-    if (bpsTime !== "null") {
+    if (bpsTime !== null) {
         bpsLastUpdated = parseInt(bpsTime);
     }
 
-    if (hwsTime !== "null") {
+    if (hwsTime !== null) {
         hwsLastUpdated = parseInt(hwsTime);
     }
 };
