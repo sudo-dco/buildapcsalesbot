@@ -43,7 +43,7 @@ app.get("/startHWSInterval", async (req, res) => {
         await updateTimestamp();
 
         hwsInterval = setInterval(async () => {
-            let hwsStatus = await bps.getPosts(hwsLastUpdated);
+            let hwsStatus = await hws.getPosts(hwsLastUpdated);
             // error code 1 - failed to fetch new posts, keep old timestamp
             if (hwsStatus === 0) {
                 hwsLastUpdated = hwsStatus;
