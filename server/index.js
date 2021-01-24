@@ -2,9 +2,11 @@ const express = require("express");
 const clients = require("../src/helpers/clients");
 const fs = require("../src/helpers/fs");
 const hws = require("../src/hws/hws");
+const bps = require("../src/bps/bps");
 
 // VARS
-let lastUpdated = null;
+let bpsLastUpdated = null;
+let hwsLastUpdated = null;
 let bpsInterval = null;
 let hwsInterval = null;
 const timer = 300000;
@@ -20,23 +22,18 @@ app.get("/startBPSInterval", async (req, res) => {
         await updateTimestamp();
 
         bpsInterval = setInterval(async () => {
-            checkBPS();
-            let latestTime = await hws.getPosts(lastUpdated);
+            let bpsStatus = await bps.getPosts(bpsLastUpdated);
             // error code 1 - failed to fetch new posts, keep old timestamp
-            if (latestTime === 1) {
-                latestTime = lastUpdated;
-            } else {
-                lastUpdated = latestTime.toString();
+            if (bpsStatus !== 1) {
+                bpsLastUpdated = bpsStatus;
+                await fs.setTimestamp(bpsStatus.toString(), "bps");
             }
-
-            await fs.setTimestamp(latestTime.toString());
-            console.log("in function: ", lastUpdated);
         }, timer);
 
         res.sendStatus(200);
     } catch (error) {
-        console.error("Error running BPS interval: ");
-        fs.setErrorLog(error.toString());
+        console.error("Error running BPS interval");
+        fs.setErrorLog(error.toString(), "bps");
         res.sendStatus(500);
     }
 });
@@ -44,13 +41,20 @@ app.get("/startBPSInterval", async (req, res) => {
 app.get("/startHWSInterval", async (req, res) => {
     try {
         await updateTimestamp();
-        hwsInterval = setInterval(() => {
-            lastUpdated = hws.getPosts(lastUpdated);
+
+        hwsInterval = setInterval(async () => {
+            let hwsStatus = await hws.getPosts(hwsLastUpdated);
+            // error code 1 - failed to fetch new posts, keep old timestamp
+            if (hwsStatus !== 1) {
+                hwsLastUpdated = hwsStatus;
+                await fs.setTimestamp(hwsStatus.toString(), "hws");
+            }
         }, timer);
-        console.log("HWS Interval Running");
+
         res.sendStatus(200);
     } catch (error) {
         console.error("Error running HWS interval");
+        fs.setErrorLog(error.toString(), "hws");
         res.sendStatus(500);
     }
 });
@@ -226,10 +230,15 @@ const sendMessages = (posts, subreddit) => {
 };
 
 const updateTimestamp = async () => {
-    const time = await fs.getTimestamp();
+    const bpsTime = await fs.getTimestamp("bps");
+    const hwsTime = await fs.getTimestamp("hws");
 
-    if (time !== "null") {
-        lastUpdated = parseInt(time);
+    if (bpsTime !== null) {
+        bpsLastUpdated = parseInt(bpsTime);
+    }
+
+    if (hwsTime !== null) {
+        hwsLastUpdated = parseInt(hwsTime);
     }
 };
 

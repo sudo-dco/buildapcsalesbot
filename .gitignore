@@ -5,5 +5,8 @@ Procfile
 /env/.env
 /node_modules
 /public/bundle.js
-/src/helpers/timestamps.txt
-/src/helpers/error.log
+
+/src/bps/error.log
+/src/hws/error.log
+/src/bps/timestamp.log
+/src/hws/timestamp.log
