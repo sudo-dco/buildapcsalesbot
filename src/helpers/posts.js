@@ -1,5 +1,11 @@
 const clients = require("./clients");
 const fs = require("./fs");
+const db = require("../db/db");
+
+const convertAcronym = {
+    bps: "buildapcsales",
+    hws: "hardwareswap",
+};
 
 const fetchNewPosts = async (subreddit) => {
     try {
@@ -19,6 +25,12 @@ const fetchNewPosts = async (subreddit) => {
         console.log("Error fetching posts");
         fs.setErrorLog(error.toString());
     }
+};
+
+const parse = async (subreddit) => {
+    const newPosts = await fetchNewPosts(convertAcronym[subreddit]);
+
+    const savedPosts = await db.getMany(subreddit);
 };
 
 exports.fetchNew = fetchNewPosts;
