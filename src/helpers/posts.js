@@ -2,9 +2,10 @@ const clients = require("./clients");
 const fs = require("./fs");
 const db = require("../db/db");
 
-const convertAcronym = {
+const initials = {
     bps: "buildapcsales",
     hws: "hardwareswap",
+    hls: "homelabsales",
 };
 
 const fetchNewPosts = async (subreddit) => {
@@ -28,9 +29,15 @@ const fetchNewPosts = async (subreddit) => {
 };
 
 const parse = async (subreddit) => {
-    const newPosts = await fetchNewPosts(convertAcronym[subreddit]);
+    try {
+        const newPosts = await fetchNewPosts(initials[subreddit]);
+        const latestPost = await db.getLatest(subreddit);
 
-    const savedPosts = await db.getMany(subreddit);
+        return [newPosts, latestPost];
+    } catch (error) {
+        console.error("Error with parse: ", parse);
+    }
 };
 
 exports.fetchNew = fetchNewPosts;
+exports.parse = parse;
