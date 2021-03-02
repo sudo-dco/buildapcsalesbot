@@ -8,5 +8,8 @@ Procfile
 
 /src/bps/error.log
 /src/hws/error.log
+/src/hls/error.log
 /src/bps/timestamp.log
 /src/hws/timestamp.log
+
+/tests/posts.test.js
