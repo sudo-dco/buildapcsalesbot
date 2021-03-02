@@ -13,6 +13,7 @@ const App = () => {
             <button value={"stopInterval"}>Stop Interval</button>
             <button value={"runBPS"}>Run BPS</button>
             <button value={"runHWS"}>Run HWS</button>
+            <button value={"runHLS"}>Run HLS</button>
             <button value={"clearBPSChannel"}>Clear Messages in BPS Channel</button>
             <button value={"clearHWSChannel"}>Clear Messages in HWS Channel</button>
         </div>
