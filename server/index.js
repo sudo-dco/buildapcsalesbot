@@ -10,6 +10,7 @@ let bpsLastUpdated = null;
 let hwsLastUpdated = null;
 let bpsInterval = null;
 let hwsInterval = null;
+let hlsInterval = null;
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -55,6 +56,14 @@ app.get("/startHWSInterval", async (req, res) => {
         fs.setErrorLog(error.toString(), "hws");
         res.sendStatus(500);
     }
+});
+
+app.get("/startHLSInterval", async (req, res) => {
+    hlsInterval = setInterval(() => {
+        hls.getPosts();
+    }, TIMER);
+
+    res.sendStatus(200);
 });
 
 app.get("/stopInterval", (req, res) => {
