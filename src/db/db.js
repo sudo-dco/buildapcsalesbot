@@ -13,6 +13,7 @@ let db = new sqlite3.Database(path.resolve(__dirname, "./posts.db"), (err) => {
 const tables = {
     bps: "bpsPosts",
     hws: "hwsPosts",
+    hls: "hlsPosts",
 };
 
 const createTables = () => {
@@ -109,7 +110,36 @@ const getMany = (tableName) => {
     const data = new Promise((resolve, reject) => {
         db.all(
             `SELECT * FROM ${tables[tableName]} ORDER BY ? DESC LIMIT ?`,
-            ["postCreated", 5],
+            ["postCreated", 25],
+            (err, rows) => {
+                if (err) {
+                    console.error("Error finding record");
+                    throw err;
+                }
+
+                if (rows) {
+                    resolve(rows);
+                } else {
+                    resolve(null);
+                }
+            }
+        );
+    });
+
+    db.close();
+    return data;
+};
+
+/*
+    Retrieve the newest record from database table
+    @param {string} tableName - name of db table
+    @return {array.<Object>} objects postID, postCreated
+*/
+const getLatest = async (tableName) => {
+    const data = await new Promise((resolve, reject) => {
+        db.all(
+            `SELECT * FROM ${tables[tableName]} ORDER BY ? DESC LIMIT ?`,
+            ["postCreated", 1],
             (err, rows) => {
                 if (err) {
                     console.error("Error finding record");
@@ -193,3 +223,4 @@ exports.insertOne = insertOne;
 exports.insertMany = insertMany;
 exports.getMany = getMany;
 exports.getCount = getCount;
+exports.getLatest = getLatest;
