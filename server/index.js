@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("../src/helpers/fs");
 const hws = require("../src/hws/hws");
 const bps = require("../src/bps/bps");
+const hls = require("../src/hls/hls");
 
 // VARS
 const TIMER = 300000; // default 5 mins
@@ -104,6 +105,10 @@ app.get("/runHWS", async (req, res) => {
         fs.setErrorLog(error.toString(), "hws");
         res.sendStatus(500);
     }
+});
+
+app.get("/runHLS", async (req, res) => {
+    hls.getPosts();
 });
 
 app.get("/clearBPSChannel", (req, res) => {
