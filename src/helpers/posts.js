@@ -1,5 +1,12 @@
 const clients = require("./clients");
 const fs = require("./fs");
+const db = require("../db/db");
+
+const initials = {
+    bps: "buildapcsales",
+    hws: "hardwareswap",
+    hls: "homelabsales",
+};
 
 const fetchNewPosts = async (subreddit) => {
     try {
@@ -21,4 +28,16 @@ const fetchNewPosts = async (subreddit) => {
     }
 };
 
+const parse = async (subreddit) => {
+    try {
+        const newPosts = await fetchNewPosts(initials[subreddit]);
+        const latestPost = await db.getLatest(subreddit);
+
+        return [newPosts, latestPost];
+    } catch (error) {
+        console.error("Error with parse: ", parse);
+    }
+};
+
 exports.fetchNew = fetchNewPosts;
+exports.parse = parse;

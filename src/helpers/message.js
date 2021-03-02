@@ -2,6 +2,7 @@ const clients = require("../helpers/clients");
 
 const bpsChannelID = "794367501663600672";
 const hwsChannelID = "795863235215360001";
+const hlsChannelID = "816394154325966869";
 
 const sendMessages = (posts, subreddit) => {
     let channel = null;
@@ -21,6 +22,16 @@ const sendMessages = (posts, subreddit) => {
             break;
         case "hws":
             channel = clients.discord.channels.cache.get(hwsChannelID);
+            posts.forEach((post) =>
+                channel.send(
+                    post.title +
+                        "\n\nSee Comments: https://www.reddit.com/" +
+                        post.permalink
+                )
+            );
+            break;
+        case "hls":
+            channel = clients.discord.channels.cache.get(hlsChannelID);
             posts.forEach((post) =>
                 channel.send(
                     post.title +
