@@ -5,6 +5,7 @@ const path = require("path");
 const dirPaths = {
     bps: path.resolve(__dirname, "../bps"),
     hws: path.resolve(__dirname, "../hws"),
+    hls: path.resolve(__dirname, "../hls"),
 };
 
 /*
@@ -14,7 +15,7 @@ const dirPaths = {
 */
 const setErrorLog = async (data, dir) => {
     try {
-        await fsPromises.writeFile(`${dirPaths[dir]}/error.log`, data, {
+        await fsPromises.writeFile(`${dirPaths[dir]}/error.log`, data + "\n", {
             flag: "a+",
         });
 
