@@ -10,10 +10,10 @@ const App = () => {
         <div onClick={e => handleClick(e.target.value)}>
             <button value={"startBPSInterval"}>Start BPS Interval</button>
             <button value={"startHWSInterval"}>Start HWS Interval</button>
+            <button value={"startHLSInterval"}>Start HLS Interval</button>
             <button value={"stopInterval"}>Stop Interval</button>
             <button value={"runBPS"}>Run BPS</button>
             <button value={"runHWS"}>Run HWS</button>
-            <button value={"runHLS"}>Run HLS</button>
             <button value={"clearBPSChannel"}>Clear Messages in BPS Channel</button>
             <button value={"clearHWSChannel"}>Clear Messages in HWS Channel</button>
         </div>
